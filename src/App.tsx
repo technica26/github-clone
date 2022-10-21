@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 //import logo from './logo.svg';
 import "./App.css";
 import { Box, Button, ButtonGroup, Text } from "@chakra-ui/react";
@@ -7,7 +7,16 @@ import Repository from "./repository";
 // 1. import `ChakraProvider` component
 //import { ChakraProvider } from '@chakra-ui/react'
 
+
+
 function App() {
+  const [data, setdata] = useState<any>()
+  useEffect(()=>{
+    fetch('https://api.github.com/users/technica26/repos')
+  .then(response => response.json())
+  .then(data => setdata(data));
+  },[]
+  )
   // 2. Wrap ChakraProvider at the root of your app
   return (
     //<div className="App">
@@ -32,23 +41,13 @@ function App() {
         </Text>
       </Box>
 
-      <Box
-        bg="#FFFFFF"
-        w="1134px"
-        pl="26px"
-        py="57px"
-        mx="73px"
-        mb="26px"
-        color="black"
-        height="133px"
-        boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
-      >
-        <Text fontSize="16px" fontWeight="700">
-          リポジトリ1
-        </Text>
-      </Box>
-
-      <Repository>リポジトリ2</Repository>
+      
+      {data?.map((item:any)=>{
+        return (
+          <Repository>{item.name}</Repository>
+        )
+      })}
+      
     </> //フラグメント
   );
 }
